@@ -8,7 +8,7 @@ A full-stack web application for listing and reviewing accommodations, built wit
 TripHuts is an Airbnb-inspired platform where users can create, view, edit, and delete property listings. Users can also leave reviews and ratings for properties.  
 The application features user authentication, image uploads, and interactive maps for property locations.
 
-🔗 **Live Demo:** https://major-project-1-jaro.onrender.com/
+🔗 **Live Demo:** https://major-project-1-jaro.onrender.com/listings
 
 ---
 
