@@ -2,8 +2,9 @@
   .search-btn{
     background-color: #ff385c;
     color: white;
-    padding: 0rem 1rem 0rem 1.5rem;
+    padding: 0rem 1rem ;
     border-radius: 25px;
+    margin-left: 1rem;
   }
   .search-btn:hover{
     background-color: #e31c4b;
@@ -17,6 +18,13 @@
     border-radius: 25px;
     padding: 0.5rem 3rem 0.5rem 3rem;
     font-size: 1rem;
+    width: 26rem;
+  }
+
+  @media (max-width: 768px) {
+    .search-inp{
+      width: 100%;
+    }
   }
 
 </style>
@@ -29,18 +37,18 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
       <div class="navbar-nav">
-        <a class="nav-link" href="/listings">TripHuts</a>
+        <a class="nav-link" href="/listings">Hotello</a>
       </div>
       <div class="search-bar navbar-nav ms-auto">
-        <form class="d-flex" role="search">
-        <input class="form-control me-2 search-inp" type="search" placeholder="Search Destination" aria-label="Search"/>
+        <form class="d-flex" role="search" method="GET" action="/listings">
+        <input class="form-control me-2 search-inp" type="search" name="search" value="<%= typeof searchQuery !== 'undefined' ? searchQuery : '' %>" placeholder="Search Your Space" aria-label="Search"/>
         <button class="btn search-btn " type="submit"><i class="fa-solid fa-magnifying-glass"></i>Search</button>
       </form>
       </div>
       <div class="navbar-nav ms-auto">
-        <a class="nav-link" href="/listings/new">Host Your Hut</a>
+        <a class="nav-link" href="/listings/new">Host Your Space</a>
         <%if(!currentUser){ %>
-        <a class="nav-link active" aria-current="page" href="/signup"><b>SignUp</b></a>
+        <a class="nav-link active" aria-current="page" href="/signup"><b>Signup</b></a>
         <a class="nav-link" href="/login"><b>Login</b></a>
        <% }else{ %>
         <a class="nav-link" href="/logout"><b>Logout</b></a>

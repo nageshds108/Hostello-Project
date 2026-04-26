@@ -30,6 +30,13 @@ module.exports.isOwner = async (req, res, next) => {
 };
 
 module.exports.validateListing = (req, res, next) => {
+    if (req.body?.listing) {
+        if (!req.body.listing.amenities) {
+            req.body.listing.amenities = [];
+        } else if (!Array.isArray(req.body.listing.amenities)) {
+            req.body.listing.amenities = [req.body.listing.amenities];
+        }
+    }
     const { error } = listingSchema.validate(req.body);
     if (error) {
         let errMsg = error.details.map(el => el.message).join(",");

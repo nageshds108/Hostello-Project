@@ -3,9 +3,29 @@ const mbxGeocoding = require('@mapbox/mapbox-sdk/services/geocoding');
 const Token =  process.env.MAP_TOKEN;
 const geocodingClient = mbxGeocoding({ accessToken: Token });
 
+function buildGeocodeQuery(listingData = {}) {
+    const parts = [listingData.address, listingData.location, listingData.state]
+        .map((part) => (part || "").trim())
+        .filter(Boolean);
+    return parts.join(", ");
+}
+
 module.exports.index=async (req, res) => {
-    const listings = await Listings.find();
-    res.render('listing/listings', { listings });
+    const searchQuery = (req.query.search || "").trim();
+    const filter = {};
+
+    if (searchQuery) {
+        const escapedQuery = searchQuery.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+        filter.$or = [
+            { title: { $regex: escapedQuery, $options: "i" } },
+            { location: { $regex: escapedQuery, $options: "i" } },
+            { address: { $regex: escapedQuery, $options: "i" } },
+            { description: { $regex: escapedQuery, $options: "i" } },
+        ];
+    }
+
+    const listings = await Listings.find(filter);
+    res.render('listing/listings', { listings, searchQuery });
 }
 module.exports.newListing=async (req, res) => {
     res.render('listing/New.ejs');
@@ -24,12 +44,18 @@ module.exports.renderLis=async (req, res) => {
     res.render('listing/show', { listing });
 }
 module.exports.createLis=async(req, res) => {
+    const geocodeQuery = buildGeocodeQuery(req.body.listing);
+
     let coordinates = await geocodingClient.forwardGeocode({
-  query: req.body.listing.location,
+  query: geocodeQuery,
   limit: 1
 })
   .send()
 
+    if (!coordinates.body.features.length) {
+        req.flash('error', 'Unable to find this address on map. Please check address, location and state.');
+        return res.redirect('/listings/new');
+    }
 
     url=req.file.path;
     filename=req.file.filename;
@@ -54,7 +80,27 @@ module.exports.editLis=async (req, res) => {
 }
 module.exports.updateLis=async (req, res) => {
     const { id } = req.params;
-    const listing = await Listings.findByIdAndUpdate(id, req.body.listing, { runValidators: true, new: true });
+    const geocodeQuery = buildGeocodeQuery(req.body.listing);
+    let newGeometry = null;
+
+    if (geocodeQuery) {
+        const coordinates = await geocodingClient.forwardGeocode({
+      query: geocodeQuery,
+      limit: 1
+    })
+      .send();
+
+        if (coordinates.body.features.length) {
+            newGeometry = coordinates.body.features[0].geometry;
+        }
+    }
+
+    const updateData = { ...req.body.listing };
+    if (newGeometry) {
+        updateData.geometry = newGeometry;
+    }
+
+    const listing = await Listings.findByIdAndUpdate(id, updateData, { runValidators: true, new: true });
     if(typeof req.file !== 'undefined'){
     url=req.file.path;
     filename=req.file.filename;

@@ -26,89 +26,104 @@
       border-radius: 1rem;
       padding: 0.5rem;
       height: 3rem;
-      margin-left: 5rem;
+      margin-left: auto;
       display: flex;
       align-items: center;
+      white-space: nowrap;
+      flex-shrink: 0;
     }
    </style>
 
    <div id="filters">
-    
     <div class="filter">
-      <div><i class="fa-solid fa-bed"></i>
-      </div>
+      <div><i class="fa-solid fa-bed"></i></div>
       <p>Rooms</p>
     </div>
-     <div class="filter">
-      <div><i class="fa-solid fa-mountain"></i>
-      </div>
-      <p>Mountains</p>
-    </div>
-     <div class="filter">
-      <div><i class="fa-brands fa-fort-awesome"></i>
-      </div>
-      <p>Castles</p>
-    </div>
-     <div class="filter">
-      <div><i class="fa-solid fa-person-swimming"></i>
-      </div>
-      <p>Pools</p>
-    </div>
-     <div class="filter">
-      <div><i class="fa-solid fa-umbrella-beach"></i>
-      </div>
-      <p>Beaches</p>
-    </div>
-     <div class="filter">
-      <div><i class="fa-solid fa-snowflake"></i>
-      </div>
-      <p>Snowlands</p>
-    </div>
-     <div class="filter">
-      <div><i class="fa-solid fa-campground"></i>
-      </div>
-      <p>Campings</p>
+    <div class="filter">
+      <div><i class="fa-solid fa-utensils"></i></div>
+      <p>Mess</p>
     </div>
     <div class="filter">
-      <div><i class="fa-solid fa-wallet"></i>
-      </div>
+      <div><i class="fa-solid fa-gamepad"></i></div>
+      <p>Games</p>
+    </div>
+    <div class="filter">
+      <div><i class="fa-solid fa-wifi"></i></div>
+      <p>Wi-Fi</p>
+    </div>
+    <div class="filter">
+      <div><i class="fa-solid fa-shirt"></i></div>
+      <p>Laundry</p>
+    </div>
+    <div class="filter">
+      <div><i class="fa-solid fa-shield-halved"></i></div>
+      <p>Security</p>
+    </div>
+    <div class="filter">
+      <div><i class="fa-solid fa-book-open"></i></div>
+      <p>Study Room</p>
+    </div>
+    <div class="filter">
+      <div><i class="fa-solid fa-wallet"></i></div>
       <p>Budget Friendly</p>
     </div>
     <div class="filter">
-      <div><i class="fa-solid fa-gem"></i>
-      </div>
+      <div><i class="fa-solid fa-gem"></i></div>
       <p>Premium</p>
     </div>
-    <!-- <div class="filter">
-      <div><i class="fa-solid fa-heart"></i>
-      </div>
-      <p>Coule Friendly</p>
-    </div> -->
+    <div class="filter">
+      <div><i class="fa-solid fa-snowflake"></i></div>
+      <p>AC</p>
+    </div>
+    <div class="filter">
+      <div><i class="fa-solid fa-square-parking"></i></div>
+      <p>Parking</p>
+    </div>
+    <div class="filter">
+      <div><i class="fa-solid fa-dumbbell"></i></div>
+      <p>Gym</p>
+    </div>
+
     <div class="tax-switch">
       <div class="form-check-reverse form-switch">
-      <input class="form-check-input" type="checkbox" role="switch" id="switchCheckDefault">
-      <label class="form-check-label" for="switchCheckDefault">Display total after taxes</label>
-</div>
+        <input class="form-check-input" type="checkbox" role="switch" id="switchCheckDefault">
+        <label class="form-check-label" for="switchCheckDefault">Display total after taxes</label>
+      </div>
     </div>
    </div>
-   
-  <div class="row row-cols-lg-3 row row-cols-md-2 row row-cols-sm-1" >
-    <%for(listing of listings) {%>
-  <a href="/listings/<%= listing._id %>"  class="text-decoration-none">
-   <div class="listing-card card">
-   <img src="<%= listing.image.url %>" class="card-img-top" alt="img" style="height: 20rem">
-   <div class="card-img-overlay"></div>
-   <div class="card-body">
-    <p class="card-text">
-        <b><%= listing.title %> </b><br>
-       <%= "₹" + listing.price.toLocaleString("en-IN") %>/night &nbsp;&nbsp;<small class="tax-info">+ 18% GST</small>
-    </p>
-  </div>
-</div>
-</a>
-    <%}%>
-       </div>
-       <script>
+
+  <% if (searchQuery) { %>
+    <p class="mt-3 mb-2">Showing results for "<%= searchQuery %>"</p>
+  <% } %>
+
+  <% if (listings.length === 0) { %>
+    <div class="alert alert-warning mt-3" role="alert">
+      No hostels found. Try another location or college name.
+    </div>
+  <% } else { %>
+    <div class="row row-cols-lg-3 row row-cols-md-2 row row-cols-sm-1">
+      <% for (const listing of listings) { %>
+      <a href="/listings/<%= listing._id %>" class="text-decoration-none">
+        <div class="listing-card card">
+          <img src="<%= listing.image.url %>" class="card-img-top" alt="img" style="height: 20rem">
+          <div class="card-img-overlay"></div>
+          <div class="card-body">
+            <p class="card-text">
+              <b><%= listing.title %></b><br>
+              <%= "\u20B9" + listing.price.toLocaleString("en-IN") %>/month &nbsp;&nbsp;<small class="tax-info">+ 18% GST</small><br>
+              <small><%= listing.hostelType || "Hostel" %> | <%= listing.location %><%= listing.address ? ", " + listing.address : "" %></small><br>
+              <% if (listing.amenities && listing.amenities.length) { %>
+                <small class="text-muted"><%= listing.amenities.slice(0, 3).join(" | ") %></small>
+              <% } %>
+            </p>
+          </div>
+        </div>
+      </a>
+      <% } %>
+    </div>
+  <% } %>
+
+<script>
   const taxSwitch = document.getElementById('switchCheckDefault');
 
   taxSwitch.addEventListener('click', () => {

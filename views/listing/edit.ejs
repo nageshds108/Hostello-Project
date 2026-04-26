@@ -1,24 +1,31 @@
 <% layout('layout/boiler') %>
 
 <body>
-    <div class="row mt-3"><div class="col-8 offset-2">
+    <div class="row mt-4 mb-4"><div class="col-lg-8 col-md-10 offset-lg-2 offset-md-1">
     <form action="/listings/<%= listing._id %>?_method=PUT" method="POST" novalidate class="needs-validation" enctype="multipart/form-data">
-        <div class="mb-2 ">
+        <div class="mb-3">
         <label for="title" class="form-label">Title</label>
-        <input class="form-control" name="listing[title]" type="text" value="<%= listing.title %>"  required>
+        <input id="title" class="form-control" name="listing[title]" type="text" value="<%= listing.title %>" required>
         <div class="invalid-feedback">Please Enter A Title</div>
 
         </div>
-         <div class="mb-2">
+         <div class="mb-3">
         <label for="description" class="form-label">Description</label>
-        <textarea class="form-control" name="listing[description]" required><%=listing.description%></textarea>
+        <textarea id="description" class="form-control" name="listing[description]" rows="3" required><%= listing.description %></textarea>
         <div class="invalid-feedback">Please Enter A Short Description</div>
         </div>
 
-         <div class="mb-2">
-        <label for="price" class="form-label">Price</label>
-        <input type="number"class="form-control" name="listing[price]" value="<%= listing.price %>" required>
-        <div class="invalid-feedback">Please Enter Price</div>
+        <div class="row">
+          <div class="mb-3 col-md-6">
+            <label for="price" class="form-label">Price (per month)</label>
+            <input id="price" type="number" class="form-control" name="listing[price]" min="0" value="<%= listing.price %>" required>
+            <div class="invalid-feedback">Please Enter Price</div>
+          </div>
+          <div class="mb-3 col-md-6">
+            <label for="contactNo" class="form-label">Contact Number</label>
+            <input id="contactNo" type="text" class="form-control" name="listing[contactNo]" value="<%= listing.contactNo %>" required>
+            <div class="invalid-feedback">Please Enter Contact Number</div>
+          </div>
         </div>
         <div>
             Previous Image:<br>
@@ -26,23 +33,66 @@
         </div>
 
 
-        <div class="mb-2">
+        <div class="mb-3">
         <label for="image" class="form-label">Upload New Image</label>
-        <input type="file" class="form-control" name="listing[image]" >
+        <input id="image" type="file" class="form-control" name="listing[image]" >
         </div>
 
         <div class="row">
-         <div class="mb-2 col-md-4">
+         <div class="mb-3 col-md-3">
         <label for="location" class="form-label">Location</label>
-        <input type="text" class="form-control"  name="listing[location]" value="<%= listing.location %>" required>
+        <input id="location" type="text" class="form-control" name="listing[location]" value="<%= listing.location %>" required>
         <div class="invalid-feedback">Please Enter Location</div>
         </div>
 
-         <div class="mb-2 col-md-6">
-        <label for="country" class="form-label">Country</label>
-        <input class="form-control" type="text" name="listing[country]" value="<%= listing.country %>" required>
-        <div class="invalid-feedback">Please Enter A Country</div>
+         <div class="mb-3 col-md-3">
+        <label for="address" class="form-label">Address/Area</label>
+        <input id="address" class="form-control" type="text" name="listing[address]" value="<%= listing.address || '' %>" required>
+        <div class="invalid-feedback">Please Enter Address/Area</div>
         </div>
+
+         <div class="mb-3 col-md-3">
+        <label for="state" class="form-label">State</label>
+        <input id="state" class="form-control" type="text" name="listing[state]" value="<%= listing.state || listing.country || '' %>" required>
+        <div class="invalid-feedback">Please Enter A State</div>
+        </div>
+        <div class="mb-3 col-md-3">
+          <label for="hostelType" class="form-label">Hostel Type</label>
+          <select id="hostelType" class="form-select" name="listing[hostelType]" required>
+            <option value="Male" <%= listing.hostelType === 'Male' ? 'selected' : '' %>>Male</option>
+            <option value="Female" <%= listing.hostelType === 'Female' ? 'selected' : '' %>>Female</option>
+            <option value="Coed" <%= listing.hostelType === 'Coed' ? 'selected' : '' %>>Coed</option>
+          </select>
+          <div class="invalid-feedback">Please Select Hostel Type</div>
+        </div>
+        </div>
+
+        <div class="mb-3">
+          <label for="bedSharing" class="form-label">Bed Sharing</label>
+          <select id="bedSharing" class="form-select" name="listing[bedSharing]" required>
+            <option value="1 Bed" <%= listing.bedSharing === '1 Bed' ? 'selected' : '' %>>1 Bed</option>
+            <option value="2 Bed" <%= listing.bedSharing === '2 Bed' ? 'selected' : '' %>>2 Bed</option>
+            <option value="3 Bed" <%= listing.bedSharing === '3 Bed' ? 'selected' : '' %>>3 Bed</option>
+            <option value="4 Bed" <%= listing.bedSharing === '4 Bed' ? 'selected' : '' %>>4 Bed</option>
+          </select>
+          <div class="invalid-feedback">Please Select Bed Sharing</div>
+        </div>
+
+        <div class="mb-3">
+          <p class="form-label mb-2">Amenities</p>
+          <div class="row">
+            <div class="col-md-4 col-sm-6 mb-2"><div class="form-check"><input class="form-check-input" type="checkbox" name="listing[amenities][]" value="Wi-Fi" id="edit-amenity-wifi" <%= listing.amenities && listing.amenities.includes('Wi-Fi') ? 'checked' : '' %>><label class="form-check-label" for="edit-amenity-wifi">Wi-Fi</label></div></div>
+            <div class="col-md-4 col-sm-6 mb-2"><div class="form-check"><input class="form-check-input" type="checkbox" name="listing[amenities][]" value="AC" id="edit-amenity-ac" <%= listing.amenities && listing.amenities.includes('AC') ? 'checked' : '' %>><label class="form-check-label" for="edit-amenity-ac">AC</label></div></div>
+            <div class="col-md-4 col-sm-6 mb-2"><div class="form-check"><input class="form-check-input" type="checkbox" name="listing[amenities][]" value="Parking" id="edit-amenity-parking" <%= listing.amenities && listing.amenities.includes('Parking') ? 'checked' : '' %>><label class="form-check-label" for="edit-amenity-parking">Parking</label></div></div>
+            <div class="col-md-4 col-sm-6 mb-2"><div class="form-check"><input class="form-check-input" type="checkbox" name="listing[amenities][]" value="Laundry" id="edit-amenity-laundry" <%= listing.amenities && listing.amenities.includes('Laundry') ? 'checked' : '' %>><label class="form-check-label" for="edit-amenity-laundry">Laundry</label></div></div>
+            <div class="col-md-4 col-sm-6 mb-2"><div class="form-check"><input class="form-check-input" type="checkbox" name="listing[amenities][]" value="Security" id="edit-amenity-security" <%= listing.amenities && listing.amenities.includes('Security') ? 'checked' : '' %>><label class="form-check-label" for="edit-amenity-security">Security</label></div></div>
+            <div class="col-md-4 col-sm-6 mb-2"><div class="form-check"><input class="form-check-input" type="checkbox" name="listing[amenities][]" value="Study Room" id="edit-amenity-study-room" <%= listing.amenities && listing.amenities.includes('Study Room') ? 'checked' : '' %>><label class="form-check-label" for="edit-amenity-study-room">Study Room</label></div></div>
+            <div class="col-md-4 col-sm-6 mb-2"><div class="form-check"><input class="form-check-input" type="checkbox" name="listing[amenities][]" value="Gym" id="edit-amenity-gym" <%= listing.amenities && listing.amenities.includes('Gym') ? 'checked' : '' %>><label class="form-check-label" for="edit-amenity-gym">Gym</label></div></div>
+            <div class="col-md-4 col-sm-6 mb-2"><div class="form-check"><input class="form-check-input" type="checkbox" name="listing[amenities][]" value="Lift" id="edit-amenity-lift" <%= listing.amenities && listing.amenities.includes('Lift') ? 'checked' : '' %>><label class="form-check-label" for="edit-amenity-lift">Lift</label></div></div>
+            <div class="col-md-4 col-sm-6 mb-2"><div class="form-check"><input class="form-check-input" type="checkbox" name="listing[amenities][]" value="Cleaning" id="edit-amenity-cleaning" <%= listing.amenities && listing.amenities.includes('Cleaning') ? 'checked' : '' %>><label class="form-check-label" for="edit-amenity-cleaning">Cleaning</label></div></div>
+            <div class="col-md-4 col-sm-6 mb-2"><div class="form-check"><input class="form-check-input" type="checkbox" name="listing[amenities][]" value="Mess" id="edit-amenity-mess" <%= listing.amenities && listing.amenities.includes('Mess') ? 'checked' : '' %>><label class="form-check-label" for="edit-amenity-mess">Mess</label></div></div>
+            <div class="col-md-4 col-sm-6 mb-2"><div class="form-check"><input class="form-check-input" type="checkbox" name="listing[amenities][]" value="Games" id="edit-amenity-games" <%= listing.amenities && listing.amenities.includes('Games') ? 'checked' : '' %>><label class="form-check-label" for="edit-amenity-games">Games</label></div></div>
+          </div>
         </div>
         <button class="btn add-btn btn-success mb-3 mt-3">Submit</button>
     </form>

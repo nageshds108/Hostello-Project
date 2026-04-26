@@ -13,7 +13,7 @@ module.exports.signupUser = async(req, res,next) => {
             if (err){
                  return next(err);
             }else{
-                 req.flash('success', 'Welcome to TripHut!');
+                 req.flash('success', 'Welcome to Hotello!');
                  res.redirect('/listings');
                  }
         });

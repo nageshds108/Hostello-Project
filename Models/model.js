@@ -23,7 +23,28 @@ const userSchema = new Schema({
         type: String,
         required: true
     },
-    country: {
+    address: {
+        type: String,
+        required: true
+    },
+    state: {
+        type: String,
+        required: true,
+        default: "Maharashtra"
+    },
+    amenities: [{
+        type: String,
+    }],
+    contactNo: {
+        type: String,
+        required: true
+    },
+    hostelType: {
+        type: String,
+        enum: ['Male', 'Female', 'Coed'],
+        required: true
+    },
+    bedSharing: {
         type: String,
         required: true
     },

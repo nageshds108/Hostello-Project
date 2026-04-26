@@ -8,7 +8,12 @@ const listingSchema = Joi.object({
     price: Joi.number().min(0).required(),
     image: Joi.string().allow("",null),
     location: Joi.string().required(),
-    country: Joi.string().required(),
+    address: Joi.string().required(),
+    state: Joi.string().required(),
+    amenities: Joi.array().items(Joi.string()),
+    contactNo: Joi.string().required(),
+    hostelType: Joi.string().valid('Male', 'Female', 'Coed').required(),
+    bedSharing: Joi.string().required(),
   }).required()
 });
 

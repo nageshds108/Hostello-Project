@@ -1,45 +1,95 @@
 <% layout('layout/boiler') %>
 <body>
-    <div class="row mt-3">
-    <div class="col-8 offset-2">
-    <h2>Enter Details Of Your New Listing</h2>
+    <div class="row mt-4 mb-4">
+    <div class="col-lg-8 col-md-10 offset-lg-2 offset-md-1">
+    <h2>Enter Details Of Your Space</h2>
     <br>
     <form action="/listings" method="POST" novalidate class="needs-validation" enctype="multipart/form-data">
-        <div class="mb-2">
+        <div class="mb-3">
         <label for="title" class="form-label">Title</label>
-        <input name="listing[title]" type="text" placeholder="Add Title" class="form-control" required>
-        <div class="valid-feedback">Title Looks good !</div>
-        </div>
-        <div class="mb-2">
-        <label for="description"class="form-label">Description</label>
-        <textarea name="listing[description]" class="form-control" required></textarea>
-        <div class="invalid-feedback">Please Enter A Short Description</div>
+        <input id="title" name="listing[title]" type="text" placeholder="Add Title" class="form-control" required>
+        <div class="valid-feedback">Title looks good!</div>
         </div>
 
-        <div class="mb-2">
-        <label for="price" class="form-label">Price</label>
-        <input class="form-control"  name="listing[price]" required placeholder="1200">
-        <div class="invalid-feedback"> Please Enter Price</div>
+        <div class="mb-3">
+        <label for="description" class="form-label">Description</label>
+        <textarea id="description" name="listing[description]" class="form-control" rows="3" required></textarea>
+        <div class="invalid-feedback">Please enter a short description</div>
         </div>
 
-         <div class="mb-2">
-        <label for="image"class="form-label">Upload Image</label>
-        <input class="form-control" type="file" name="listing[image]"  required>
-        <div class="valid-feedback"> </div>
+        <div class="row">
+          <div class="mb-3 col-md-6">
+            <label for="price" class="form-label">Price (per month)</label>
+            <input id="price" class="form-control" name="listing[price]" type="number" min="0" required placeholder="1200">
+            <div class="invalid-feedback">Please enter price</div>
+          </div>
+          <div class="mb-3 col-md-6">
+            <label for="contactNo" class="form-label">Contact Number</label>
+            <input id="contactNo" class="form-control" type="text" name="listing[contactNo]" required placeholder="+91-98765-43210">
+            <div class="invalid-feedback">Please enter contact number</div>
+          </div>
         </div>
 
-        <div class="row mb-2">
-        <div class="mb-2 col-md-4" >
+         <div class="mb-3">
+        <label for="image" class="form-label">Upload Image</label>
+        <input id="image" class="form-control" type="file" name="listing[image]" required>
+        </div>
+
+        <div class="row">
+        <div class="mb-3 col-md-3">
         <label for="location" class="form-label">Location</label>
-        <input class="form-control" type="text" name="listing[location]" required placeholder="Pune">
-        <div class="invalid-feedback"> Please Enter Location</div>
+        <input id="location" class="form-control" type="text" name="listing[location]" required placeholder="Pune">
+        <div class="invalid-feedback">Please enter location</div>
+        </div>
+        <div class="mb-3 col-md-3">
+        <label for="address" class="form-label">Address/Area</label>
+        <input id="address" class="form-control" type="text" name="listing[address]" required placeholder="Kothrud">
+        <div class="invalid-feedback">Please enter address/area</div>
+        </div>
+        <div class="mb-3 col-md-3">
+        <label for="state" class="form-label">State</label>
+        <input id="state" class="form-control" type="text" name="listing[state]" required placeholder="Maharashtra">
+        <div class="invalid-feedback">Please enter state</div>
+        </div>
+        <div class="mb-3 col-md-3">
+          <label for="hostelType" class="form-label">Hostel Type</label>
+          <select id="hostelType" class="form-select" name="listing[hostelType]" required>
+            <option value="" selected disabled>Select type</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+            <option value="Coed">Coed</option>
+          </select>
+          <div class="invalid-feedback">Please select hostel type</div>
+        </div>
+        </div>
 
+        <div class="mb-3">
+          <label for="bedSharing" class="form-label">Bed Sharing</label>
+          <select id="bedSharing" class="form-select" name="listing[bedSharing]" required>
+            <option value="" selected disabled>Select bed sharing</option>
+            <option value="1 Bed">1 Bed</option>
+            <option value="2 Bed">2 Bed</option>
+            <option value="3 Bed">3 Bed</option>
+            <option value="4 Bed">4 Bed</option>
+          </select>
+          <div class="invalid-feedback">Please select bed sharing</div>
         </div>
-        <div class="mb-2 col-md-6">
-        <label for="country" class="form-label">Country</label>
-        <input class="form-control" type="text" name="listing[country]" required placeholder="India">
-        <div class="invalid-feedback">Please Enter Country</div>
-        </div>
+
+        <div class="mb-3">
+          <p class="form-label mb-2">Amenities</p>
+          <div class="row">
+            <div class="col-md-4 col-sm-6 mb-2"><div class="form-check"><input class="form-check-input" type="checkbox" name="listing[amenities][]" value="Wi-Fi" id="amenity-wifi"><label class="form-check-label" for="amenity-wifi">Wi-Fi</label></div></div>
+            <div class="col-md-4 col-sm-6 mb-2"><div class="form-check"><input class="form-check-input" type="checkbox" name="listing[amenities][]" value="AC" id="amenity-ac"><label class="form-check-label" for="amenity-ac">AC</label></div></div>
+            <div class="col-md-4 col-sm-6 mb-2"><div class="form-check"><input class="form-check-input" type="checkbox" name="listing[amenities][]" value="Parking" id="amenity-parking"><label class="form-check-label" for="amenity-parking">Parking</label></div></div>
+            <div class="col-md-4 col-sm-6 mb-2"><div class="form-check"><input class="form-check-input" type="checkbox" name="listing[amenities][]" value="Laundry" id="amenity-laundry"><label class="form-check-label" for="amenity-laundry">Laundry</label></div></div>
+            <div class="col-md-4 col-sm-6 mb-2"><div class="form-check"><input class="form-check-input" type="checkbox" name="listing[amenities][]" value="Security" id="amenity-security"><label class="form-check-label" for="amenity-security">Security</label></div></div>
+            <div class="col-md-4 col-sm-6 mb-2"><div class="form-check"><input class="form-check-input" type="checkbox" name="listing[amenities][]" value="Study Room" id="amenity-study-room"><label class="form-check-label" for="amenity-study-room">Study Room</label></div></div>
+            <div class="col-md-4 col-sm-6 mb-2"><div class="form-check"><input class="form-check-input" type="checkbox" name="listing[amenities][]" value="Gym" id="amenity-gym"><label class="form-check-label" for="amenity-gym">Gym</label></div></div>
+            <div class="col-md-4 col-sm-6 mb-2"><div class="form-check"><input class="form-check-input" type="checkbox" name="listing[amenities][]" value="Lift" id="amenity-lift"><label class="form-check-label" for="amenity-lift">Lift</label></div></div>
+            <div class="col-md-4 col-sm-6 mb-2"><div class="form-check"><input class="form-check-input" type="checkbox" name="listing[amenities][]" value="Cleaning" id="amenity-cleaning"><label class="form-check-label" for="amenity-cleaning">Cleaning</label></div></div>
+            <div class="col-md-4 col-sm-6 mb-2"><div class="form-check"><input class="form-check-input" type="checkbox" name="listing[amenities][]" value="Mess" id="amenity-mess"><label class="form-check-label" for="amenity-mess">Mess</label></div></div>
+            <div class="col-md-4 col-sm-6 mb-2"><div class="form-check"><input class="form-check-input" type="checkbox" name="listing[amenities][]" value="Games" id="amenity-games"><label class="form-check-label" for="amenity-games">Games</label></div></div>
+          </div>
         </div>
         <button class="btn add-btn btn-success mb-2">Submit</button>
     </form>
